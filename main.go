@@ -22,6 +22,16 @@ type TrailEntry struct {
 func main() {
 	flag.Parse()
 
+	pkgs := readStdinPkgs()
+
+	printed := make(map[string]bool)
+
+	for _, pkgName := range flag.Args() {
+		printRecursiveReverseDeps(pkgs, printed, pkgName)
+	}
+}
+
+func readStdinPkgs() map[string]Pkg {
 	pkgs := make(map[string]Pkg)
 
 	s := bufio.NewScanner(os.Stdin)
@@ -37,9 +47,12 @@ func main() {
 		depPkg.ReverseDeps[node] = true
 	}
 
-	printed := make(map[string]bool)
+	return pkgs
+}
+
+func printRecursiveReverseDeps(pkgs map[string]Pkg, printed map[string]bool, pkgName string) {
 	trail := []*TrailEntry{{
-		PkgNames: []string{flag.Arg(0)},
+		PkgNames: []string{pkgName},
 		PkgNext:  0,
 	}}
 
