@@ -1,3 +1,3 @@
-module github.com/JoelColledge/godeptrace
+module github.com/JoelColledge/gomodtree
 
 go 1.17
